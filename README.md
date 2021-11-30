@@ -5,3 +5,5 @@
 - Ernest Molner
 - Adria Serrano
 - Arnau Closa
+
+*Universitat d'Andorra 2021 - 2022*
