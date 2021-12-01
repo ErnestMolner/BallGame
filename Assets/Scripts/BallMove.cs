@@ -4,49 +4,102 @@ using UnityEngine;
 
 public class BallMove : MonoBehaviour
 {
-    private Rigidbody rb ;
+    // private Rigidbody rb ;
     private bool jumpKeyWasPressed;
     private float horizontalInput;
     private float verticalInput;
-    private float speed = 10.0f;
+    private float limit;
+    private float speed = 5.0f;
 
-    public Transform camera;
+    //salta...........
+    public float Jumpv = 0.2f;
+    public Rigidbody rb;
+    public float thrust = 5;
+    bool m_isGrounded;
+    bool b_isGrounded;
+
+
+   // public Transform camera;
 
     // Start is called before the first frame update
     void Start()
     {
+
+
         rb = GetComponent<Rigidbody>();
+        m_isGrounded = true;
+        b_isGrounded = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        //Jump Signal
-        if (Input.GetKeyDown(KeyCode.Space))
+        horizontalInput = Input.GetAxis("Horizontal");
+        verticalInput = Input.GetAxis("Vertical");
+
+        if (Input.GetKeyDown(KeyCode.Space) && m_isGrounded == true)
         {
             Jump();
         }
+
+        if (Input.GetKeyDown(KeyCode.Space) && b_isGrounded == true)
+        {
+            JumpProva();
+        }
+
+        /*if (Input.GetKeyDown(KeyCode.Space))
+        {
+            jumpKeyWasPressed = true;
+        }*/
+    }
+
+    public void Jump()
+    {
+        m_isGrounded = false;
+        //  rb.AddForce(0, thrust, 0, ForceMode.Impulse);
+        rb.AddForce(Vector3.up * 5, ForceMode.VelocityChange);
+    }
+
+    public void JumpProva()
+    {
+        b_isGrounded = false;
+       // rb.AddForce(plane, 0.5f);
     }
 
     private void FixedUpdate()
     {
-        horizontalInput = Input.GetAxis("Horizontal");
-        verticalInput = Input.GetAxis("Vertical");
+
+        rb.AddForce(new Vector3(horizontalInput, 0.0f, verticalInput) * speed);
+
         Vector3 direction = new Vector3(horizontalInput, 0f, verticalInput).normalized;
-        
-        direction = Quaternion.AngleAxis(camera.rotation.eulerAngles.y, Vector3.up) * direction;
+
+        direction = Quaternion.AngleAxis(transform.rotation.eulerAngles.y, Vector3.up) * direction;
 
         rb.AddForce(direction * speed);
+        /*
+        if (jumpKeyWasPressed)
+        {
+            rb.AddForce(Vector3.up * 5, ForceMode.VelocityChange);
+            jumpKeyWasPressed = false;
+        }*/
     }
 
-    private void Jump() 
+    void OnCollisionEnter(Collision other)
     {
-        rb.AddForce(Vector3.up * 5, ForceMode.VelocityChange);
+        if (other.gameObject.CompareTag("Ground"))
+        {
+            m_isGrounded = true;
+        }
+        if (other.gameObject.CompareTag("Wall"))
+        {
+            b_isGrounded = true;
+            Debug.Log("Tocat");
+        }
     }
 
-    private void OnApplicationFocus(bool focus) 
+    private void OnApplicationFocus(bool focus)
     {
-        if (focus) 
+        if (focus)
         {
             Cursor.lockState = CursorLockMode.Locked;
         }
@@ -55,4 +108,6 @@ public class BallMove : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
         }
     }
+
+
 }
