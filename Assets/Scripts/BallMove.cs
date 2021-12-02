@@ -19,7 +19,7 @@ public class BallMove : MonoBehaviour
     bool b_isGrounded;
 
 
-   // public Transform camera;
+   public Transform camera;
 
     // Start is called before the first frame update
     void Start()
@@ -69,11 +69,11 @@ public class BallMove : MonoBehaviour
     private void FixedUpdate()
     {
 
-        rb.AddForce(new Vector3(horizontalInput, 0.0f, verticalInput) * speed);
+       // rb.AddForce(new Vector3(horizontalInput, 0.0f, verticalInput) * speed);
 
         Vector3 direction = new Vector3(horizontalInput, 0f, verticalInput).normalized;
 
-        direction = Quaternion.AngleAxis(transform.rotation.eulerAngles.y, Vector3.up) * direction;
+        direction = Quaternion.AngleAxis(camera.rotation.eulerAngles.y, Vector3.up) * direction;
 
         rb.AddForce(direction * speed);
         /*
