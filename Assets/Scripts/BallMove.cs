@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+using UnityEngine.UI;
+
 
 public class BallMove : MonoBehaviour
 {
@@ -20,15 +23,42 @@ public class BallMove : MonoBehaviour
 
 
    public Transform camera;
+   public Canvas canvas;
+
+    public  bool d = false;
+
+
+    [SerializeField] private Transform p;
+    [SerializeField] private Transform r;
+
+    
+
+
+    public float t_s = 0.0f;
+        
+    public float t_e = 0.0f;
+
+
+    public Image life;
+    public float va;
+    public float vm;
+
 
     // Start is called before the first frame update
     void Start()
     {
 
-
+       
         rb = GetComponent<Rigidbody>();
         m_isGrounded = true;
         b_isGrounded = true;
+        d = false;
+
+
+
+       
+
+
     }
 
     // Update is called once per frame
@@ -51,6 +81,7 @@ public class BallMove : MonoBehaviour
         {
             jumpKeyWasPressed = true;
         }*/
+        life.fillAmount = va / vm;
     }
 
     public void Jump()
@@ -84,6 +115,8 @@ public class BallMove : MonoBehaviour
         }*/
     }
 
+
+   
     void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.CompareTag("Ground"))
@@ -95,7 +128,42 @@ public class BallMove : MonoBehaviour
             b_isGrounded = true;
             Debug.Log("Tocat");
         }
+
+
+        if (other.gameObject.tag == "Enemy"  )
+        {
+            va = va - 25.5f ;
+        }
+
+
+       
+        
+
+
+       
+
+        if (other.gameObject.tag == "Enemy" && va <= 0)
+        {
+
+                d = true;
+
+            // canvas.enabled = !canvas.enabled;
+
+            //Destroy(gameObject);
+
+
+            p.transform.position = r.transform.position;
+            va = 100;
+
+
+        }
+        
+
+
     }
+
+
+    
 
     private void OnApplicationFocus(bool focus)
     {
@@ -108,6 +176,8 @@ public class BallMove : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
         }
     }
+
+    
 
 
 }

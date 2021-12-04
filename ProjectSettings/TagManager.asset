@@ -9,6 +9,7 @@ TagManager:
   - NPC
   - Enemy
   - RadarBlip
+  - Pause
   layers:
   - Default
   - TransparentFX
