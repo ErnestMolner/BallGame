@@ -9,6 +9,11 @@ public class BallMove : MonoBehaviour
     private float horizontalInput;
     private float verticalInput;
     private float speed = 10.0f;
+    public float dashSpeed = 5.0f;
+    public float maxSpeed = 5.0f;
+    public float dashTime = 3.0f;
+    private float timer = 0.0f;
+    private Vector3 direction;
 
     public Transform camera;
 
@@ -21,10 +26,19 @@ public class BallMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        timer += Time.deltaTime;
+        float seconds = timer % 60;
+
         //Jump Signal
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Jump();
+        }
+
+        if (seconds > dashTime && rb.velocity.magnitude < maxSpeed &&(Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Q)))
+        {
+            timer = 0.0f;
+            Dash();
         }
     }
 
@@ -32,7 +46,7 @@ public class BallMove : MonoBehaviour
     {
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
-        Vector3 direction = new Vector3(horizontalInput, 0f, verticalInput).normalized;
+        direction = new Vector3(horizontalInput, 0f, verticalInput).normalized;
         
         direction = Quaternion.AngleAxis(camera.rotation.eulerAngles.y, Vector3.up) * direction;
 
@@ -42,6 +56,11 @@ public class BallMove : MonoBehaviour
     private void Jump() 
     {
         rb.AddForce(Vector3.up * 5, ForceMode.VelocityChange);
+    }
+
+    private void Dash()
+    {
+        rb.AddForce(direction * dashSpeed, ForceMode.Impulse);
     }
 
     private void OnApplicationFocus(bool focus) 
