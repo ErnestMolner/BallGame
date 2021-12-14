@@ -10,10 +10,13 @@ public class Enemy1 : MonoBehaviour
     UnityEngine.AI.NavMeshAgent enemigo;
     private bool dentro = false;
 
+    int life;
+
     // Use this for initialization
     void Start()
     {
         enemigo = GetComponent<UnityEngine.AI.NavMeshAgent>();
+        life = 1;
     }
 
     void OnTriggerEnter(Collider other)
@@ -45,4 +48,21 @@ public class Enemy1 : MonoBehaviour
             enemigo.destination = this.transform.position;
         }
     }
-} 
+
+    void OnCollisionEnter(Collision other)
+    { 
+
+      if (other.gameObject.CompareTag("Kill") )
+        {
+           life= life - 1;
+            Debug.Log(life);
+
+         }
+         if (other.gameObject.CompareTag("Kill") && life == 0 )
+        {
+            Destroy(gameObject);
+
+        }
+    }
+}
+

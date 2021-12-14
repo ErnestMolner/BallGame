@@ -12,12 +12,12 @@ public class BallMove : MonoBehaviour
     private float horizontalInput;
     private float verticalInput;
     private float limit;
-    private float speed = 5.0f;
+    private float speed = 10.0f;
 
     //salta...........
     public float Jumpv = 0.2f;
     public Rigidbody rb;
-    public float thrust = 5;
+    public float thrust = 10;
     bool m_isGrounded;
     bool b_isGrounded;
 
@@ -43,6 +43,20 @@ public class BallMove : MonoBehaviour
     public float va;
     public float vm;
 
+    public float TimeToDestroy = 3f;
+
+    public Text ContadorText;
+    public int TiempoText;
+
+    //camera zoom
+/*
+    int zoom = 20;
+    int normal = 60;
+    float smooth = 5;
+
+    private bool isZoomed = false;
+*/
+
 
     // Start is called before the first frame update
     void Start()
@@ -53,11 +67,6 @@ public class BallMove : MonoBehaviour
         m_isGrounded = true;
         b_isGrounded = true;
         d = false;
-
-
-
-       
-
 
     }
 
@@ -82,6 +91,23 @@ public class BallMove : MonoBehaviour
             jumpKeyWasPressed = true;
         }*/
         life.fillAmount = va / vm;
+        /*
+        if(Input.GetMouseButtonDown(1))
+        {
+            Debug.Log(Input.mousePosition);
+            isZoomed = !isZoomed;
+        }
+
+        if(isZoomed)
+        {
+            GetComponent<Camera>().fieldOfView = Mathf.Lerp(GetComponent<Camera>().fieldOfView, zoom, Time.deltaTime * smooth);
+
+        }
+        else
+        {
+            GetComponent<Camera>().fieldOfView = Mathf.Lerp(GetComponent<Camera>().fieldOfView, normal, Time.deltaTime * smooth);
+        }
+        */
     }
 
     public void Jump()
@@ -142,20 +168,37 @@ public class BallMove : MonoBehaviour
 
        
 
-        if (other.gameObject.tag == "Enemy" && va <= 0)
+        if (other.gameObject.tag == "Enemy" && va <= 0 && !d)
         {
 
-                d = true;
+            //d = true;
 
             // canvas.enabled = !canvas.enabled;
 
             //Destroy(gameObject);
 
+            StartCoroutine(WaitBeforeShow());
+         
+
+           // va = 100;
+
+
+        }
+
+        IEnumerator WaitBeforeShow()
+        {
+            d = true;
+            canvas.enabled = !canvas.enabled;
+ 
+            yield return new WaitForSeconds(3);
+          
+         
+       
 
             p.transform.position = r.transform.position;
             va = 100;
-
-
+            canvas.enabled = !canvas.enabled;
+            d = false;
         }
         
 
