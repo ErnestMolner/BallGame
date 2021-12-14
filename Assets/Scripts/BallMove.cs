@@ -13,6 +13,11 @@ public class BallMove : MonoBehaviour
     private float verticalInput;
     private float limit;
     private float speed = 10.0f;
+    public float dashSpeed = 5.0f;
+    public float maxSpeed = 5.0f;
+    public float dashTime = 3.0f;
+    private float timer = 0.0f;
+    private Vector3 direction;
 
     //salta...........
     public float Jumpv = 0.2f;
@@ -76,6 +81,10 @@ public class BallMove : MonoBehaviour
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
 
+        timer += Time.deltaTime;
+        float seconds = timer % 60;
+
+        //Jump Signal
         if (Input.GetKeyDown(KeyCode.Space) && m_isGrounded == true)
         {
             Jump();
@@ -121,15 +130,20 @@ public class BallMove : MonoBehaviour
     {
         b_isGrounded = false;
        // rb.AddForce(plane, 0.5f);
-    }
+    }       
+
+        if (seconds > dashTime && rb.velocity.magnitude < maxSpeed &&(Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Q)))
+        {
+            timer = 0.0f;
+            Dash();
+        }
 
     private void FixedUpdate()
     {
-
-       // rb.AddForce(new Vector3(horizontalInput, 0.0f, verticalInput) * speed);
-
-        Vector3 direction = new Vector3(horizontalInput, 0f, verticalInput).normalized;
-
+        horizontalInput = Input.GetAxis("Horizontal");
+        verticalInput = Input.GetAxis("Vertical");
+        direction = new Vector3(horizontalInput, 0f, verticalInput).normalized;
+        
         direction = Quaternion.AngleAxis(camera.rotation.eulerAngles.y, Vector3.up) * direction;
 
         rb.AddForce(direction * speed);
@@ -160,13 +174,6 @@ public class BallMove : MonoBehaviour
         {
             va = va - 25.5f ;
         }
-
-
-       
-        
-
-
-       
 
         if (other.gameObject.tag == "Enemy" && va <= 0 && !d)
         {
@@ -200,15 +207,14 @@ public class BallMove : MonoBehaviour
             canvas.enabled = !canvas.enabled;
             d = false;
         }
-        
-
-
     }
 
+    private void Dash()
+    {
+        rb.AddForce(direction * dashSpeed, ForceMode.Impulse);
+    }
 
-    
-
-    private void OnApplicationFocus(bool focus)
+    private void OnApplicationFocus(bool focus) 
     {
         if (focus)
         {
@@ -219,8 +225,4 @@ public class BallMove : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
         }
     }
-
-    
-
-
 }
