@@ -20,6 +20,15 @@ public class pyhsicsButton : MonoBehaviour
     public Collider[] CollidersToIgnore;
     public UnityEvent onPressed;
     public UnityEvent onReleased;
+    public Transform door;
+
+    public Vector3 closedPosition = new Vector3(.51f, 3.63f, 0);
+    public Vector3 openedPosition = new Vector3(.51f, 7f, 0);
+
+    public float openSpeed = 5;
+
+    public bool open = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -58,39 +67,14 @@ public class pyhsicsButton : MonoBehaviour
         if (buttonTop.localPosition.y <= buttonLowerLimit.localPosition.y)
             buttonTop.transform.position = new Vector3(buttonLowerLimit.position.x, buttonLowerLimit.position.y, buttonLowerLimit.position.z);
 
-
         if (Vector3.Distance(buttonTop.position, buttonLowerLimit.position) < upperLowerDiff * threshHold)
             isPressed = true;
         else
             isPressed = false;
 
-        if (isPressed && prevPressedState != isPressed)
-            Pressed();
-        if (!isPressed && prevPressedState != isPressed)
-            Released();
-    }
-
-    void Pressed()
-    {
-        prevPressedState = isPressed;
-        Debug.Log("button pressed");
-        /*
-        pressedSound.pitch = 1;
-        pressedSound.Play();
-        */
-        onPressed.Invoke();
-        
-    }
-
-    void Released()
-    {
-        prevPressedState = isPressed;
-        Debug.Log("button released");
-        /*
-        releasedSound.pitch = Random.Range(1.1f, 1.2f);
-        releasedSound.Play();
-        */
-        onReleased.Invoke();
-        
+        if (isPressed)
+            door.position = Vector3.Lerp(door.position, openedPosition, Time.deltaTime * openSpeed);
+        if (!isPressed)
+            door.position = Vector3.Lerp(door.position, closedPosition, Time.deltaTime * openSpeed);
     }
 }
