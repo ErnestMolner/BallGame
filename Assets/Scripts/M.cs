@@ -9,6 +9,8 @@ public class M : MonoBehaviour
 {
     public GameObject mainMenu;
     public GameObject optionsMenu;
+    public GameObject guia;
+
 
     public Text label;
 
@@ -121,12 +123,29 @@ public class M : MonoBehaviour
 
     public void ShowOptions()
     {
+         guia.SetActive(false);
         mainMenu.SetActive(false);
         optionsMenu.SetActive(true);
     }
 
+        public void ShowGuia()
+    { 
+        guia.SetActive(true);
+        mainMenu.SetActive(false);
+        optionsMenu.SetActive(false);
+    }
+     public void HideGuia()
+    {
+          guia.SetActive(false);
+        optionsMenu.SetActive(false);
+        mainMenu.SetActive(true);
+        ChangeText();
+    }
+
+
     public void HideOptions()
     {
+          guia.SetActive(false);
         optionsMenu.SetActive(false);
         mainMenu.SetActive(true);
         ChangeText();
