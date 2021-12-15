@@ -210,6 +210,30 @@ public class BallMove : MonoBehaviour
 
         }
 
+
+        
+        if (other.gameObject.tag == "boss"  )
+        {
+            va = va - 40 ;
+        }
+
+        if (other.gameObject.tag == "boss" && va <= 0 && !d)
+        {
+
+            //d = true;
+
+            // canvas.enabled = !canvas.enabled;
+
+            //Destroy(gameObject);
+
+            StartCoroutine(WaitBeforeShow());
+         
+
+           // va = 100;
+
+
+        }
+
         IEnumerator WaitBeforeShow()
         {
             d = true;
