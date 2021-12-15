@@ -10,6 +10,7 @@ TagManager:
   - Enemy
   - RadarBlip
   - Pause
+  - boss
   layers:
   - Default
   - TransparentFX

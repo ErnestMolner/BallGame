@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
-public class Enemy1 : MonoBehaviour
+public class Enemy : MonoBehaviour
 {
 
     public Transform jugador;
@@ -12,11 +13,18 @@ public class Enemy1 : MonoBehaviour
 
     int life;
 
+
+    public Canvas canvas;
+
+    int cont;
+
     // Use this for initialization
     void Start()
     {
         enemigo = GetComponent<UnityEngine.AI.NavMeshAgent>();
-        life = 1;
+        life = 2;
+ 
+     
     }
 
     void OnTriggerEnter(Collider other)
@@ -61,8 +69,13 @@ public class Enemy1 : MonoBehaviour
          if (other.gameObject.CompareTag("Kill") && life == 0 )
         {
             Destroy(gameObject);
+           
+
+
 
         }
+
+   
     }
 }
 

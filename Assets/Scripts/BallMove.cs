@@ -61,7 +61,8 @@ public class BallMove : MonoBehaviour
 
     private bool isZoomed = false;
 */
-
+    public AudioSource soundSource;
+    public Text soundText;
 
     // Start is called before the first frame update
     void Start()
@@ -95,6 +96,13 @@ public class BallMove : MonoBehaviour
             JumpProva();
         }
 
+        if (seconds > dashTime && rb.velocity.magnitude < maxSpeed &&(Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Q)))
+        {
+            timer = 0.0f;
+            Dash();
+        }
+
+
         /*if (Input.GetKeyDown(KeyCode.Space))
         {
             jumpKeyWasPressed = true;
@@ -122,9 +130,24 @@ public class BallMove : MonoBehaviour
     public void Jump()
     {
         m_isGrounded = false;
+         rb.AddForce(Vector3.up * 5, ForceMode.VelocityChange);
         //  rb.AddForce(0, thrust, 0, ForceMode.Impulse);
-        rb.AddForce(Vector3.up * 5, ForceMode.VelocityChange);
+            PlayerPrefs.SetFloat("soundVolume", soundSource.volume);
+       
     }
+
+      public void CheckSoundText()
+    {
+        if (soundSource.volume > 0)
+        {
+            soundText.text = "Sound: ON";
+        }
+        else
+        {
+            soundText.text = "Sound: OFF";
+        }
+    }
+
 
     public void JumpProva()
     {
@@ -132,11 +155,6 @@ public class BallMove : MonoBehaviour
        // rb.AddForce(plane, 0.5f);
     }       
 
-        if (seconds > dashTime && rb.velocity.magnitude < maxSpeed &&(Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Q)))
-        {
-            timer = 0.0f;
-            Dash();
-        }
 
     private void FixedUpdate()
     {
